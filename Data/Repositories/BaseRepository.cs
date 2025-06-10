@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Data.Repositories;
 
-public abstract class BaseRepository<TEntity> where TEntity : class
+public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
     protected readonly DataContext _context;
     protected readonly DbSet<TEntity> _table;
@@ -16,7 +16,7 @@ public abstract class BaseRepository<TEntity> where TEntity : class
         _table = _context.Set<TEntity>();
     }
 
-    public virtual async Task<RepositoryResult<IEnumerable<TEntity>>> GetAllAsync(TEntity entity)
+    public virtual async Task<RepositoryResult<IEnumerable<TEntity>>> GetAllAsync()
     {
         try
         {
@@ -53,9 +53,9 @@ public abstract class BaseRepository<TEntity> where TEntity : class
     public virtual async Task<RepositoryResult> AlreadyExistAsync(Expression<Func<TEntity, bool>> expression)
     {
         var result = await _table.AnyAsync(expression);
-            return result
-            ? new RepositoryResult { Success = true }
-            : new RepositoryResult { Success = false, Error = "Not found" };
+        return result
+        ? new RepositoryResult { Success = true }
+        : new RepositoryResult { Success = false, Error = "Not found" };
     }
 
     public virtual async Task<RepositoryResult> AddAsync(TEntity entity)
