@@ -43,6 +43,7 @@ public class EventService(IEventRepository eventRepository) : IEventService
         var result = await _eventRepository.GetAllAsync();
         var events = result.Result?.Select(x => new Event
         {
+            Id = x.Id,
             Image = x.Image,
             Title = x.Title,
             Description = x.Description,
@@ -59,6 +60,7 @@ public class EventService(IEventRepository eventRepository) : IEventService
         {
             var currentEvent = new Event
             {
+                Id = result.Result.Id,
                 Image = result.Result.Image,
                 Title = result.Result.Title,
                 Description = result.Result.Description,
